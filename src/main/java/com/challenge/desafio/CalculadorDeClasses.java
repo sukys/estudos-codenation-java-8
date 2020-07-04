@@ -18,8 +18,6 @@ public class CalculadorDeClasses implements Calculavel {
 	 */
 	@Override
 	public BigDecimal somar(Object classe) {
-		if (!classePossuiAnotation(classe))
-			return BigDecimal.ZERO;
 		BigDecimal total = BigDecimal.ZERO;
 		for (Field field : classe.getClass().getDeclaredFields()) {
 			if (isSomar(field))
@@ -37,8 +35,6 @@ public class CalculadorDeClasses implements Calculavel {
 	 */
 	@Override
 	public BigDecimal subtrair(Object classe) {
-		if (!classePossuiAnotation(classe))
-			return BigDecimal.ZERO;
 		BigDecimal total = BigDecimal.ZERO;
 		for (Field field : classe.getClass().getDeclaredFields()) {
 			if (isSubtrair(field))
@@ -56,23 +52,7 @@ public class CalculadorDeClasses implements Calculavel {
 	 */
 	@Override
 	public BigDecimal totalizar(Object classe) {
-		if (!classePossuiAnotation(classe))
-			return BigDecimal.ZERO;
 		return somar(classe).subtract(subtrair(classe));
-	}
-
-	/**
-	 * Verifica se a classe possui campos com annotation. Caso a classe não tenha
-	 * nenhum atributo com annotation, retornar BigDecimal.ZERO
-	 * 
-	 * @param classe
-	 * @return
-	 */
-	private boolean classePossuiAnotation(Object classe) {
-		for (Field field : classe.getClass().getDeclaredFields())
-			if (hasAnotation(field))
-				return true;
-		return false;
 	}
 
 	/**
@@ -103,16 +83,6 @@ public class CalculadorDeClasses implements Calculavel {
 	 */
 	private boolean isBigDecimal(Field field) {
 		return field.getType().isAssignableFrom(BigDecimal.class);
-	}
-
-	/**
-	 * verifica se o campo tem alguma das anotaçoes de Somar ou Subtrair
-	 * 
-	 * @param field
-	 * @return
-	 */
-	private boolean hasAnotation(Field field) {
-		return isSomar(field) || isSubtrair(field);
 	}
 
 	/**
